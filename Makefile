@@ -14,7 +14,7 @@ CC = gcc
 
 NAME = get_next_line.a
 
-BUFF = -D BUFFER_SIZE=1
+#BUFF = -D BUFFER_SIZE=1
 
 SRC :=	get_next_line.c \
 	get_next_line_utils.c \
@@ -29,7 +29,7 @@ $(NAME): $(OBJ_S)
 	ar -rcs $@ $^
 
 %.o:%.c
-	@$(CC) -c $(CFLAG) -I. $(BUFF) $< -o $@
+	@$(CC) -c $(CFLAG) -I.  $< -o $@
 
 clean: 
 	/bin/rm -f *.o

@@ -12,35 +12,49 @@
 
 #include "get_next_line.h"
 
+void	ft_free_fub(char **fub)
+{
+	if (*fub != NULL || fub)
+	{
+		free(*fub);
+		fub = NULL;
+	}
+}
+
 char	*get_buf(int fd, char **fub)
 {
 	char		*buf;
-	char		*print;
 	char		*tmp;
 	int			k;
 
 	k = 1;
-	buf = malloc(BUFFER_SIZE * (sizeof(char)));
-	if (!buf)
-		return (NULL);
 	while (k > 0)
 	{
+		buf = (char *)calloc((BUFFER_SIZE + 1), (sizeof(*buf)));
 		k = read(fd, buf, BUFFER_SIZE);
 		if (!buf)
 		{
 			free(buf);
 			return (NULL);
 		}
-		buf[k] = '\0';
+		if (ft_strchr(buf, '\0'))
+		{
+			tmp = ft_strdup(*fub);
+			ft_free_fub(fub);
+			*fub = ft_freejoin(tmp, buf);
+			tmp = get_print(fub);
+			return (tmp);
+		}
 		tmp = ft_strdup(*fub);
-		*fub = ft_strjoin(tmp, buf);
+		ft_free_fub(fub);
+		*fub = ft_freejoin(tmp, buf);
 		if (!fub)
 			free(*fub);
 		if (ft_strchr(*fub, '\n'))
 		{
-			print = get_print(fub);
+			tmp = get_print(fub);
 			*fub = get_line(fub);
-			return (print);
+			return (tmp);
 		}
 	}
 	return (NULL);
@@ -58,7 +72,7 @@ char	*get_print(char **fub)
 	tmp = *fub;
 	while ((tmp[i]) && (tmp[i] != '\n'))
 		i++;
-	print = malloc((i + 2) * sizeof(char));
+	print = (char *)malloc((i + 2) * sizeof(char));
 	while (k <= i)
 	{
 		print[k] = tmp[k];
@@ -78,13 +92,14 @@ char	*get_line(char **fub)
 
 	i = 0;
 	k = 0;
+	l = 0;
 	tmp = *fub;
 	while (tmp[i])
 		i++;
 	while (tmp[l] && tmp[l] != '\n')
 		l++;
 	l++;
-	line = malloc(sizeof(char) * ((i - l) + 1));
+	line = (char *)malloc(sizeof(char) * ((i - l) + 1));
 	while (l < i)
 	{
 		line[k] = tmp[l];
@@ -92,6 +107,7 @@ char	*get_line(char **fub)
 		k++;
 	}
 	line[k] = '\0';
+	ft_free_fub(fub);
 	return (line);
 }
 
@@ -102,6 +118,13 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE < 0)
 		return (NULL);
+	if (!fub)
+		fub = calloc(BUFFER_SIZE + 1, sizeof(*fub));
 	buf = get_buf(fd, &fub);
+	/*if (!buf)
+	{
+		free(buf);
+		return (NULL);
+	}*/
 	return (buf);
 }

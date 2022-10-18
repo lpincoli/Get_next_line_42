@@ -21,11 +21,12 @@
 
 char	*get_next_line(int fd);
 char	*get_buf(int fd, char **fub);
-char	*ft_strchr(const char *s, int c);
-char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strchr(char *s, int c);
+char	*ft_freejoin(char *s1, char *s2);
 char	*get_print(char **fub);
 char	*get_line(char **fub);
-size_t	ft_strlen(const char *str);
-char	*ft_strdup(const char *s);
+size_t	ft_strlen(char *str);
+char	*ft_strdup(char *s);
 void	*ft_calloc(size_t nmemb, size_t size);
+void	ft_free_fub(char **fub);
 #endif /* GET_NEXT_LINE_H */

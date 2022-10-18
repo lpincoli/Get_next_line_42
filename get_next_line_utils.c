@@ -12,7 +12,7 @@
 
 #include "get_next_line.h"
 
-char	*ft_strchr(const char *s, int c)
+char	*ft_strchr(char *s, int c)
 {
 	char	*pt;
 
@@ -28,34 +28,44 @@ char	*ft_strchr(const char *s, int c)
 	return (0);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_freejoin(char *s1, char *s2)
 {
 	char	*str;
-	char	*res;
+	int		i;
 
-	str = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
+	str = calloc((ft_strlen(s1) + ft_strlen(s2) + 1), sizeof(*str));
 	if (!str)
 		return (0);
-	res = str;
-	while (*s1)
-		*str++ = *s1++;
-	while (*s2)
-		*str++ = *s2++;
-	*str = '\0';
-	return (res);
+	i = 0;
+	while (s1[i])
+	{
+		str[i] = s1[i];
+		i++;
+	}
+	i = 0;
+	while (s2[i])
+	{
+		str[i] = s2[i];
+		i++;
+	}
+	ft_free_fub(&s1);
+	ft_free_fub(&s2);
+	return (str);
 }
 
-size_t	ft_strlen(const char *str)
+size_t	ft_strlen(char *str)
 {
 	size_t	i;
 
 	i = 0;
+	if (!str)
+		return (0);
 	while (str[i])
 		i++;
 	return (i);
 }
 
-char	*ft_strdup(const char *s)
+char	*ft_strdup(char *s)
 {
 	char	*str;
 	int		i;
@@ -81,6 +91,11 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	void			*p;
 	unsigned char	*p2;
 
+	if (size == 0 || nmemb == 0)
+	{
+		size = 1;
+		nmemb = 1;
+	}
 	count = nmemb * size;
 	p = malloc(count);
 	if (!p)
