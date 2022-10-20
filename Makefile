@@ -14,7 +14,7 @@ CC = gcc
 
 NAME = get_next_line.a
 
-#BUFF = -D BUFFER_SIZE=1
+BUFF = -D BUFFER_SIZE=1
 
 SRC :=	get_next_line.c \
 	get_next_line_utils.c \
@@ -29,7 +29,7 @@ $(NAME): $(OBJ_S)
 	ar -rcs $@ $^
 
 %.o:%.c
-	@$(CC) -c $(CFLAG) -I.  $< -o $@
+	@$(CC) -c $(CFLAG) $(BUFF) -I.  $< -o $@
 
 clean: 
 	/bin/rm -f *.o
@@ -38,5 +38,10 @@ fclean: clean
 	/bin/rm -f $(NAME)
 
 re: fclean all
+
+faitutto: re
+	clear
+	$(CC) $(CFLAG) main.c get_next_line.a
+	./a.out
 
 .PHONY: all clean fclean re

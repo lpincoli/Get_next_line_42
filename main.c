@@ -12,11 +12,21 @@ int	main()
 		printf("Failed to open the file");
 		exit (1);
 	}
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
+	char	*str;
+	for(int i = 0; i < 7; i++)
+	{
+	str = get_next_line(fd);
+	printf("%s", str);
+	free(str);
+	}
+	//printf("%s", get_next_line(fd));
+	//printf("%s", get_next_line(fd));
 }
+/*if (ft_strchr(buf, '\0'))
+		{
+			tmp = ft_strdup(*fub);
+			ft_free_fub(fub);
+			*fub = ft_freejoin(tmp, buf);
+			tmp = get_print(fub);
+			return (tmp);
+		}*/

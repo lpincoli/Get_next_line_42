@@ -12,102 +12,50 @@
 
 #include "get_next_line.h"
 
-void	ft_free_fub(char **fub)
-{
-	if (*fub != NULL || fub)
-	{
-		free(*fub);
-		fub = NULL;
-	}
-}
-
-char	*get_buf(int fd, char **fub)
+char	*get_buf(int fd, int *check)
 {
 	char		*buf;
-	char		*tmp;
-	int			k;
-
-	k = 1;
-	while (k > 0)
+	ssize_t	count;
+	
+	buf = malloc((sizeof(char) * (BUFFER_SIZE + 1)));
+	if (!buf)
+		return (NULL);
+	count = read(fd, buf, BUFFER_SIZE);
+	if (count <= 0)
 	{
-		buf = (char *)calloc((BUFFER_SIZE + 1), (sizeof(*buf)));
-		k = read(fd, buf, BUFFER_SIZE);
-		if (!buf)
-		{
-			free(buf);
-			return (NULL);
-		}
-		if (ft_strchr(buf, '\0'))
-		{
-			tmp = ft_strdup(*fub);
-			ft_free_fub(fub);
-			*fub = ft_freejoin(tmp, buf);
-			tmp = get_print(fub);
-			return (tmp);
-		}
-		tmp = ft_strdup(*fub);
-		ft_free_fub(fub);
-		*fub = ft_freejoin(tmp, buf);
-		if (!fub)
-			free(*fub);
-		if (ft_strchr(*fub, '\n'))
-		{
-			tmp = get_print(fub);
-			*fub = get_line(fub);
-			return (tmp);
-		}
+		*check = -1;
+		free(buf);
+		return (NULL);
 	}
-	return (NULL);
+	buf[count] = '\0';
+	*check = count;
+	return (buf);
 }
 
-char	*get_print(char **fub)
+char	*get_line(char *fub)
 {
 	int			i;
-	int			k;
-	char		*print;
-	char		*tmp;
-
-	i = 0;
-	k = 0;
-	tmp = *fub;
-	while ((tmp[i]) && (tmp[i] != '\n'))
-		i++;
-	print = (char *)malloc((i + 2) * sizeof(char));
-	while (k <= i)
-	{
-		print[k] = tmp[k];
-		k++;
-	}
-	print[k] = '\0';
-	return (print);
-}
-
-char	*get_line(char **fub)
-{
-	int			i;
-	int			l;
 	int			k;
 	char		*line;
-	char		*tmp;
 
 	i = 0;
-	k = 0;
-	l = 0;
-	tmp = *fub;
-	while (tmp[i])
+	while (fub[i] && fub[i] != '\n')
 		i++;
-	while (tmp[l] && tmp[l] != '\n')
-		l++;
-	l++;
-	line = (char *)malloc(sizeof(char) * ((i - l) + 1));
-	while (l < i)
+	if (!fub[i])
+		return (NULL);
+	line = ft_calloc(sizeof(char),(ft_lena(fub, '\0') - i));
+	if (!line || line == NULL)
 	{
-		line[k] = tmp[l];
-		l++;
-		k++;
+		free(line);
+		free(fub);
+		return (NULL);
 	}
+	i++;
+	k = 0;
+	while (fub[i])
+		line[k++] = fub[i++];
 	line[k] = '\0';
-	ft_free_fub(fub);
+	free(fub);
 	return (line);
 }
 
@@ -115,16 +63,25 @@ char	*get_next_line(int fd)
 {	
 	static char	*fub;
 	char		*buf;
-
-	if (fd < 0 || BUFFER_SIZE < 0)
+	char		*print;
+	int			check;
+	
+	if (fd < 0 || fd > 1024|| BUFFER_SIZE <= 0)
 		return (NULL);
-	if (!fub)
-		fub = calloc(BUFFER_SIZE + 1, sizeof(*fub));
-	buf = get_buf(fd, &fub);
-	/*if (!buf)
+	check = 1;
+	while (ft_presente_bybianca(fub, check) == 0)
 	{
+		buf = get_buf(fd, &check);
+		if (check == -1 && fub == NULL)
+		{
+			free(fub);
+			return (NULL);
+		}
+		fub = ft_freejoin(fub, buf);
 		free(buf);
-		return (NULL);
-	}*/
-	return (buf);
+	}
+	print = ft_calloc(1, (ft_lena(fub, '\n') + 2));
+	print = ft_strddown(print, fub);
+	fub = get_line(fub);
+	return (print);
 }

@@ -11,22 +11,26 @@
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
+
 # define GET_NEXT_LINE_H
 # include <stddef.h>
 # include <stdarg.h>
 # include <stdlib.h>
 # include <stdio.h>
+# include <string.h>
 # include <unistd.h>
 # include <fcntl.h>
+# include <sys/types.h>
 
 char	*get_next_line(int fd);
-char	*get_buf(int fd, char **fub);
-char	*ft_strchr(char *s, int c);
+char	*ft_strddown(char *dest, char *src);
+char	*get_buf(int fd, int *check);
+int	ft_presente_bybianca(const char *s, int c);
 char	*ft_freejoin(char *s1, char *s2);
-char	*get_print(char **fub);
-char	*get_line(char **fub);
-size_t	ft_strlen(char *str);
-char	*ft_strdup(char *s);
+char	*get_print(char *fub);
+char	*get_line(char *fub);
+size_t	ft_lena(char *str, int c);
+char	*ft_strdup(char *dest, char *src);
 void	*ft_calloc(size_t nmemb, size_t size);
-void	ft_free_fub(char **fub);
+char	*ft_strcpy(char *dest, char *src);
 #endif /* GET_NEXT_LINE_H */
