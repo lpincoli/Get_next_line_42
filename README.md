@@ -8,7 +8,7 @@ Reading a single line from a file
   <li>Clone this repository:</li>
   <pre><code>git clone https://github.com/lpincoli/Get_next_line_42.git</code></pre>
   <li>Go to the get_next_line directory:</li>
-  <pre><code>cd get_next_line</code></pre>
+  <pre><code>cd Get_next_line_42</code></pre>
   <li>Compile the source code with your desired buffer size (e.g., 42) using the following command:</li>
   <pre><code>gcc -Wall -Wextra -Werror -D BUFFER_SIZE=42 *.c</code></pre>
 </ol>
